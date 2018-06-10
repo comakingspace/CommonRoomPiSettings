@@ -122,7 +122,10 @@ echo 'We will anable automounting of USB Devices now'
 sudo apt-get -qq install usbmount >>/dev/null
 sudo mkdir -p /usbdrives/{usb0,usb1,usb2,usb3,usb4,usb5,usb6,usb7}
 sudo cp usbmount.conf /etc/usbmount/usbmount.conf
-
+#This is bad! but according to https://github.com/rbrito/usbmount/issues/2 we have to do this in order to enable usbmount on Rasbian stretch
+sudo cp systemd-udevd.service /lib/systemd/system/systemd-udevd.service
+sudo systemctl daemon-reload
+sudo systemctl restart systemd-udevd
 
 
 echo '--------------------------------------------'
@@ -131,11 +134,12 @@ enter_full_setting 'IPQoS 0x00' /etc/ssh/ssh_config
 enter_full_setting 'IPQoS 0x00' /etc/ssh/sshd_config
 sudo systemctl restart ssh
 
-echo 'We will change our default shell to zsh'
-sudo apt-get -qq install zsh >> /dev/null
-chsh -s /bin/zsh
-echo 'And also install the OhMyZSH Customization for zsh'
-curl -s https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sudo bash
+#this would change our default shell to zsh - temporarily disabled.
+#echo 'We will change our default shell to zsh'
+#sudo apt-get -qq install zsh >> /dev/null
+#chsh -s /bin/zsh
+#echo 'And also install the OhMyZSH Customization for zsh'
+#curl -s https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sudo bash
 
 #echo '--------------------------------------------'
 #echo 'Let us enable the pi to run as a wifi Access point'

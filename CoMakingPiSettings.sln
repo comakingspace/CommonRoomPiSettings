@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		Install.sh = Install.sh
 		Install_SystemSettings.sh = Install_SystemSettings.sh
 		README.md = README.md
+		systemd-udevd.service = systemd-udevd.service
 		usbmount.conf = usbmount.conf
 	EndProjectSection
 EndProject
