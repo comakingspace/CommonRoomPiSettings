@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2000
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{D8B505F1-A5CD-45E4-B90F-37435C408F3F}"
+	ProjectSection(SolutionItems) = preProject
+		Install.sh = Install.sh
+		Install_SystemSettings.sh = Install_SystemSettings.sh
+		README.md = README.md
+		usbmount.conf = usbmount.conf
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2DD0D337-65F5-48E4-80EE-234760932534}
+	EndGlobalSection
+EndGlobal
