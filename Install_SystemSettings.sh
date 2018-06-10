@@ -131,6 +131,11 @@ enter_full_setting 'IPQoS 0x00' /etc/ssh/ssh_config
 enter_full_setting 'IPQoS 0x00' /etc/ssh/sshd_config
 sudo systemctl restart ssh
 
+echo 'We will change our default shell to zsh'
+sudo apt-get -qq install zsh >> /dev/null
+chsh -s /bin/zsh
+echo 'And also install the OhMyZSH Customization for zsh'
+curl -s https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sudo bash
 
 #echo '--------------------------------------------'
 #echo 'Let us enable the pi to run as a wifi Access point'
