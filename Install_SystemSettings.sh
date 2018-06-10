@@ -118,6 +118,11 @@ sudo cp interfaces.txt /etc/network/interfaces
 #fi
 #echo 'iqaudio activated'
 
+echo 'We will anable automounting of USB Devices now'
+sudo apt-get -qq install usbmount >>/dev/null
+sudo mkdir /usbdrives/usb0 /usbdrives/usb1 /usbdrives/usb2 /usbdrives/usb3 /usbdrives/usb4 /usbdrives/usb5 /usbdrives/usb6 /usbdrives/usb7
+sudo cp usbmount.conf /etc/usbmount/usbmount.conf
+
 
 
 echo '--------------------------------------------'
