@@ -97,7 +97,7 @@ echo 'boot to command line'
 sudo raspi-config nonint do_boot_behaviour B1
 echo 'Change the hostname'
 sudo raspi-config nonint do_hostname CoMakingController
-sudo cp interfaces.txt /etc/network/interfaces
+
 #Right now, alsa does not need to be adjusted, since the built in sound card of the RPi supports hardware mixing.
 #echo 'adjust the ALSA config.'
 #sudo cp asound.conf /etc/asound.conf
@@ -120,7 +120,7 @@ sudo cp interfaces.txt /etc/network/interfaces
 
 echo 'We will anable automounting of USB Devices now'
 sudo apt-get -qq install usbmount >>/dev/null
-sudo mkdir -p /usbdrives/{usb0,usb1,usb2,usb3,usb4,usb5,usb6,usb7}
+sudo mkdir -p /usbdrives/usb0 /usbdrives/usb1 /usbdrives/usb2 /usbdrives/usb3 /usbdrives/usb4 /usbdrives/usb5 /usbdrives/usb6 /usbdrives/usb7
 sudo cp usbmount.conf /etc/usbmount/usbmount.conf
 #This is bad! but according to https://github.com/rbrito/usbmount/issues/2 we have to do this in order to enable usbmount on Rasbian stretch
 sudo cp systemd-udevd.service /lib/systemd/system/systemd-udevd.service
