@@ -97,6 +97,8 @@ echo 'boot to command line'
 sudo raspi-config nonint do_boot_behaviour B1
 echo 'Change the hostname'
 sudo raspi-config nonint do_hostname CoMakingController
+echo 'disable the onboard wifi chip'
+enter_full_setting dtoverlay=pi3-disable-wifi $CONFIG
 
 #Right now, alsa does not need to be adjusted, since the built in sound card of the RPi supports hardware mixing.
 #echo 'adjust the ALSA config.'
