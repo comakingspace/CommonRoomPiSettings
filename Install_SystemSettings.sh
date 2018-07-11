@@ -101,6 +101,45 @@ echo 'disable the onboard wifi chip'
 enter_full_setting dtoverlay=pi3-disable-wifi $CONFIG
 echo 'put the speaker volume to 100 percent'
 amixer sset 'PCM' 100%
+echo 'enable UART to enable the power indicator LED'
+enable_full_setting enable_uart=1 $CONFIG
+
+echo 'writing python listener for power button'
+sudo mkdir /opt/powerbutton
+sudo cat > /opt/powerbutton/listen-for-shutdown.py << EOF
+# listen to a power-button on Pin 5 (SCL)
+# based on:
+# https://howchoo.com/g/mwnlytk3zmm/how-to-add-a-power-button-to-your-raspberry-pi
+
+import RPi.GPIO as GPIO
+import subprocess
+
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.wait_for_edge(3, GPIO.FALLING)
+
+print('Power Down')
+subprocess.call(['shutdown', '-h', 'now'], shell=False)
+EOF
+
+echo 'writing systemd service for power button'
+sudo cat > /etc/systemd/system/listen-for-shutdown.service << EOF
+[Unit]
+Description=Monitor the power-button and shutdown if pressed 
+
+[Service]
+ExecStart=/usr/bin/python -u /opt/powerbutton/listen-for-shutdown.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo 'start and enable systemd service for power button'
+sudo systemctl enable listen-for-shutdown.service
+sudo systemctl start listen-for-shutdown.service
 
 #Right now, alsa does not need to be adjusted, since the built in sound card of the RPi supports hardware mixing.
 #echo 'adjust the ALSA config.'
@@ -122,7 +161,7 @@ amixer sset 'PCM' 100%
 #fi
 #echo 'iqaudio activated'
 
-echo 'We will anable automounting of USB Devices now'
+echo 'We will enable automounting of USB Devices now'
 sudo apt-get -qq install usbmount >>/dev/null
 sudo mkdir -p /usbdrives/usb0 /usbdrives/usb1 /usbdrives/usb2 /usbdrives/usb3 /usbdrives/usb4 /usbdrives/usb5 /usbdrives/usb6 /usbdrives/usb7
 sudo cp usbmount.conf /etc/usbmount/usbmount.conf
