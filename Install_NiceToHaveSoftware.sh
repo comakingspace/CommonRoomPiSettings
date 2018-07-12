@@ -12,16 +12,16 @@ sudo -u pi touch /home/pi/.zshrc
 echo '--------------------------------------------'
 echo 'Install VIM'
 sudo apt-get -qq -y install vim >> /dev/null
-wget -O /etc/vim/vimrc http://git.grml.org/f/grml-etc-core/etc/vim/vimrc
-echo 'set tabstop=2' >> /etc/vim/vimrc
-echo 'set shiftwidth=2' >> /etc/vim/vimrc
-echo 'set expandtab' >> /etc/vim/vimrc
-echo 'set paste' >> /etc/vim/vimrc
+sudo wget -O /etc/vim/vimrc http://git.grml.org/f/grml-etc-core/etc/vim/vimrc
+sudo sh -c 'echo "set tabstop=2" >> /etc/vim/vimrc'
+sudo sh -c 'echo "set shiftwidth=2" >> /etc/vim/vimrc'
+sudo sh -c 'echo "set expandtab" >> /etc/vim/vimrc'
+sudo sh -c 'echo "set paste" >> /etc/vim/vimrc'
 
 echo '--------------------------------------------'
 echo 'Install screen'
 sudo apt-get -qq -y install screen >> /dev/null
-wget -O /etc/screenrc http://git.grml.org/f/grml-etc-core/etc/grml/screenrc_generic
+sudo wget -O /etc/screenrc http://git.grml.org/f/grml-etc-core/etc/grml/screenrc_generic
 
 echo '--------------------------------------------'
 echo 'Install nmon'
