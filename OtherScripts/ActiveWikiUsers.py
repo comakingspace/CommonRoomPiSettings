@@ -23,7 +23,7 @@ top_3_users = "Most active wiki users:"
 for i in range(0,3):
     top_3_users = "%s %i.%s:%s" % (top_3_users,i+1,sorted.iloc[i].name, sorted.iloc[i]['count'])
 try:
-    publish.single("CommonRoom/FDD/Text", top_3_users, hostname="comakingcontroller")
+    publish.single("/CommonRoom/FDD/Text", top_3_users, hostname="comakingcontroller")
 except:
     print(changes.groupby('user').sum().sort_values('changedlen',ascending=False))
     print(top_3_users)
