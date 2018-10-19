@@ -1,0 +1,8 @@
+[Unit]
+Description=WebUI fot crontab
+After=network-online.target
+
+[Service]
+Restart=always
+RestartSec=0
+ExecStart=HOST=0.0.0.0 PORT=9000 crontab-ui
