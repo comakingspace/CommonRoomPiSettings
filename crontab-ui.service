@@ -10,6 +10,8 @@ StandardOutput=syslog               # Output to syslog
 StandardError=syslog                # Output to syslog
 SyslogIdentifier=CNCJS
 User=pi
+Environment=HOST=0.0.0.0
+Environment=PORT=8000
 
 [Install]
 WantedBy=multi-user.target
