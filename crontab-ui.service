@@ -4,5 +4,12 @@ After=network-online.target
 
 [Service]
 Restart=always
-RestartSec=0
+RestartSec=10
 ExecStart=HOST=0.0.0.0 PORT=8000 /usr/bin/node ~/crontab-ui/node_modules/crontab-ui/bin/crontab-ui
+StandardOutput=syslog               # Output to syslog
+StandardError=syslog                # Output to syslog
+SyslogIdentifier=CNCJS
+User=pi
+
+[Install]
+WantedBy=multi-user.target
