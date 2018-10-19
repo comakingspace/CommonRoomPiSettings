@@ -1,4 +1,7 @@
-npm install -g crontab-ui
+
+mkdir ~/crontab-ui
+cd ~/crontab-ui
+npm install crontab-ui
 
 sudo cp crontab-ui.service /etc/systemd/system/crontab-ui.service
 sudo systemctl daemon-reload
