@@ -5,10 +5,10 @@ After=network-online.target
 [Service]
 Restart=always
 RestartSec=10
-ExecStart=/usr/bin/node ~/crontab-ui/node_modules/crontab-ui/bin/crontab-ui
+ExecStart=/usr/bin/node /home/pi/crontab-ui/node_modules/crontab-ui/bin/crontab-ui
 StandardOutput=syslog               # Output to syslog
 StandardError=syslog                # Output to syslog
-SyslogIdentifier=CNCJS
+SyslogIdentifier=Crontab-ui
 User=pi
 Environment=HOST=0.0.0.0
 Environment=PORT=8000
