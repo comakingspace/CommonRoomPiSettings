@@ -5,4 +5,4 @@ After=network-online.target
 [Service]
 Restart=always
 RestartSec=0
-ExecStart=HOST=0.0.0.0 PORT=9000 crontab-ui
+ExecStart=HOST=0.0.0.0 PORT=8000 /usr/bin/node ~/crontab-ui/node_modules/crontab-ui/bin/crontab-ui
