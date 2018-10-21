@@ -4,12 +4,20 @@ import json
 import paho.mqtt.publish as publish
 import pandas as pd
 import datetime
+import argparse
 session = mwapi.Session(host='https://wiki.comakingspace.de', api_path='/api.php')
+
+parser = argparse.ArgumentParser(description='Publish the most active wiki users on the FlipDotDisplay')
+parser.add_argument('--Users', dest='user_count', type=int, default=3, help='How many users should get displayed?')
+parser.add_argument('--Days', dest='days', type=int, default=7, help='how many days should be taken into account?')
+args = parser.parse_args()
+user_count = args.user_count
+days = args.days
 
 recentchanges_result = session.get(action='query', 
                                     format='json', 
                                     list='recentchanges', 
-                                    rcstart="{:%Y-%m-%d}T00:00:00.000Z".format(datetime.datetime.now()-datetime.timedelta(days=30)),
+                                    rcstart="{:%Y-%m-%d}T00:00:00.000Z".format(datetime.datetime.now()-datetime.timedelta(days=days)),
                                     rcend="{:%Y-%m-%d}T23:59:59.999Z".format(datetime.datetime.now()), 
                                     rcdir='newer', 
                                     rcprop='title|sizes|user', 
@@ -20,8 +28,10 @@ changes['changedlen'] = abs(changes['newlen'] - changes['oldlen'])
 changes['count'] = 1
 sorted = changes.groupby('user').sum().sort_values('changedlen',ascending=False)
 top_3_users = "Most active wiki users:"
-for i in range(0,3):
-    top_3_users = "%s %i.%s:%s" % (top_3_users,i+1,sorted.iloc[i].name, sorted.iloc[i]['count'])
+if len(sorted)<user_count:
+    user_count = len(sorted)
+for i in range(0,user_count):
+    top_3_users = "%s %i.%s" % (top_3_users,i+1,sorted.iloc[i].name)
 try:
     publish.single("/CommonRoom/FDD/Text", top_3_users, hostname="comakingcontroller")
 except:
