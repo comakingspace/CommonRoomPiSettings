@@ -22,9 +22,10 @@ recentchanges_result = session.get(action='query',
                                     rcdir='newer', 
                                     rcprop='title|sizes|user', 
                                     rclimit='500', 
-                                    rctype='edit|new|categorize|external')
+                                    rctype='edit|new|categorize|external|log')
 changes = pd.DataFrame(recentchanges_result['query']['recentchanges'])
 changes['changedlen'] = abs(changes['newlen'] - changes['oldlen'])
+changes.loc[(changes['type']=='log') & (changes['title'].str.startswith('File')),'changedlen']=300
 changes['count'] = 1
 sorted = changes.groupby('user').sum().sort_values('changedlen',ascending=False)
 top_3_users = "Most active wiki users:"
