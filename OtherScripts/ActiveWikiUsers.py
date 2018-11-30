@@ -52,4 +52,4 @@ def activeusers():
         top_3_users = "%s %i.%s:%i" % (top_3_users,i+1,users[i]['name'], users[i]['recenteditcount'])
 
     #Sending it via mqtt
-    publish.single("CommonRoom/FDD/Text", top_3_users, hostname="comakingcontroller")
+    publish.single("/CommonRoom/FDD/Text", top_3_users, hostname="comakingcontroller")
