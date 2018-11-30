@@ -27,7 +27,7 @@ def randomize(listOfFiles):
     return newFile
 
 def setNewRingtone(newFile):
-    publish.single("/DoorBell/Control", f"{{'command':'selectringfile','payload':'{newFile}'}}", hostname="comakingcontroller")
+    publish.single("/DoorBell/Control", "{'command':'selectringfile','payload':'{}'}".format(newFile), hostname="comakingcontroller")
 
 if __name__ == "__main__":
     #possibleFiles = getRingtones()
