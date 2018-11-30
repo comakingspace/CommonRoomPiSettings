@@ -29,7 +29,7 @@ def randomize(listOfFiles):
 def setNewRingtone(newFile):
     print(newFile)
     print("Setting ringtone to:{}".format(newFile))
-    publish.single("/DoorBell/Control", "{{'command':'selectringfile','payload':'{}'}}".format(newFile), hostname="coma$
+    publish.single("/DoorBell/Control", "{{'command':'selectringfile','payload':'{}'}}".format(newFile), hostname="comakingcontroller")
 if __name__ == "__main__":
     #possibleFiles = getRingtones()
     setNewRingtone(randomize(getRingtones()))
