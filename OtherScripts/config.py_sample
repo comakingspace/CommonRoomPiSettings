@@ -1,2 +1,5 @@
 # Please adjust this file and rename it to "config.py"
 token = 'YOUR TELEGRAM BOT TOKEN'
+mqtt_host = "YOUR MQTT BROKER"
+small_group_id = "THE CHAT_ID OF THE SMALL GROUP"
+large_group_id = "THE CHAT_ID OF THE LARGE GROUP"

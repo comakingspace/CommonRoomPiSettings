@@ -22,7 +22,7 @@ def getRingtones():
 def on_answer(client, userdata, message):
     print("%s %s" % (message.topic, message.payload))
 
-def randomize(listOfFiles):
+def randomize_files(listOfFiles):
     newFile = listOfFiles[random.randint(0,len(listOfFiles)-1)]
     return newFile
 
@@ -30,6 +30,10 @@ def setNewRingtone(newFile):
     print(newFile)
     print("Setting ringtone to:{}".format(newFile))
     publish.single("/DoorBell/Control", "{{'command':'selectringfile','payload':'{}'}}".format(newFile), hostname="comakingcontroller")
+
+def randomize_ringtone():
+    setNewRingtone(randomize_files(getRingtones()))
+
 if __name__ == "__main__":
     #possibleFiles = getRingtones()
-    setNewRingtone(randomize(getRingtones()))
+    randomize_ringtone()
