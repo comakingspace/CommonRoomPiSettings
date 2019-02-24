@@ -1,5 +1,5 @@
 import ActiveWikiUsers
-import config
+import Bot_config as config
 import paho.mqtt.client as mqtt
 import json
 import RandomizeRingtone
