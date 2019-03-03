@@ -3,6 +3,11 @@ import Bot_config as config
 import paho.mqtt.client as mqtt
 import json
 import RandomizeRingtone
+import subprocess
+import sys
+import os
+
+from socket import gaierror
 
 from telegram.ext import Updater
 updater = Updater(token=config.token)
@@ -35,8 +40,26 @@ def on_doorbell_answer (client, userdata, msg):
         updater.bot.send_message(chat_id=config.small_group_id, text = "The new ringtone is: " + payload[31:-1])
     print(msg.topic+" "+str(msg.payload))
 
+def update (bot,update):
+    bot.send_message(chat_id=update.message.chat_id, text="Starting the update...")
+    output = subprocess.check_output(["git", "pull"])
+    bot.send_message(chat_id=update.message.chat_id, text="The git output is: \n" + str(output))
+    
+
 def new_ringtone(bot,update):
     RandomizeRingtone.randomize_ringtone()
+
+def on_mqtt_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    client.subscribe("/DoorBell/Answers")
+
+def _restart():
+    args = sys.argv[:]
+    args.insert(0, sys.executable)
+    if sys.platform == 'win32':
+        args = ['"%s"' % arg for arg in args]
+    os.chdir(os.getcwd())
+    os.execv(sys.executable, args)
 
 from telegram.ext import CommandHandler
 
@@ -45,20 +68,23 @@ WikiUser_handler = CommandHandler('WikiUser', wikiUser)
 nerven_handler = CommandHandler('wie_kann_ich_Martin_am_besten_nerven', nerven)
 new_ringtone_handler = CommandHandler('Randomize_Ringtone',new_ringtone)
 help_handler = CommandHandler('help', help)
+update_handler = CommandHandler('update', update)
 
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(WikiUser_handler)
 dispatcher.add_handler(nerven_handler)
 dispatcher.add_handler(new_ringtone_handler)
 dispatcher.add_handler(help_handler)
+dispatcher.add_handler(update_handler)
 updater.start_polling()
 
 client = mqtt.Client("Telegram_Bot")
-client.connect(config.mqtt_host,1883,10)
-client.subscribe("/DoorBell/Answers")
-client.message_callback_add("/DoorBell/Answers", on_doorbell_answer)
-client.loop_start()
-
+try:
+    client.connect(config.mqtt_host,1883,10)
+    client.message_callback_add("/DoorBell/Answers", on_doorbell_answer)
+    client.loop_start()
+except gaierror:
+    print("Not able to connect to MQTT")
 #updater.bot.send_message(chat_id=config.group_id, text = 'bot started')
 
 print('started')
