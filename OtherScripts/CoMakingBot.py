@@ -14,7 +14,7 @@ updater = Updater(token=config.token)
 dispatcher = updater.dispatcher
 
 def start (bot, update):
-    message = "Thank you for contacting me. Your Chat ID is: " + str(update.message.chat_id) + "\n Right now, I am listening to the following messages:"
+    message = "(new)Thank you for contacting me. Your Chat ID is: " + str(update.message.chat_id) + "\n Right now, I am listening to the following messages:"
     for handler in dispatcher.handlers[0]:
         #message = message + "\n [/" + handler.command[0] + "](tg://bot_command?command=" + handler.command[0]
         message = message + "\n /" + handler.command[0]
