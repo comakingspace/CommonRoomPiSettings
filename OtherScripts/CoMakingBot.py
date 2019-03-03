@@ -44,7 +44,7 @@ def update (bot,update):
     bot.send_message(chat_id=update.message.chat_id, text="Starting the update...")
     output = subprocess.check_output(["git", "pull"])
     bot.send_message(chat_id=update.message.chat_id, text="The git output is: \n" + str(output))
-    
+    _restart()
 
 def new_ringtone(bot,update):
     RandomizeRingtone.randomize_ringtone()
