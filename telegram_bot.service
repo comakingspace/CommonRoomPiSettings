@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the CoMakingSpace Telegram Bot
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python -u /home/pi/CommonRoomPiSettings/SpaceAutomation/TelegramBot/coMakingBot.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
