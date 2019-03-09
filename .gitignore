@@ -1,4 +1,3 @@
 .vscode*
 *.pyc
-OtherScripts/config.py
-OtherScripts/Bot_config.py
+*config.py
