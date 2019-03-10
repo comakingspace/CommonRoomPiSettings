@@ -86,7 +86,7 @@ class CoMakingBot:
 
         CoMakingBot.dispatcher.add_handler(start_handler)
         CoMakingBot.dispatcher.add_handler(WikiUser_handler)
-        CoMakingBot.dispatcher.add_handler(nerven_handler)
+        CoMakingBot.dispatcher.add_handler(nerven_handler,1)
         CoMakingBot.dispatcher.add_handler(new_ringtone_handler,1)
         CoMakingBot.dispatcher.add_handler(help_handler)
         CoMakingBot.dispatcher.add_handler(fdd_handler,1)
