@@ -1,4 +1,4 @@
-pip install -r /home/pi/CommonRoomPiSettings/SpaceAutomation/requirements.txt
+sudo pip3 install -r /home/pi/CommonRoomPiSettings/SpaceAutomation/requirements.txt
 
 sudo cp telegram_bot.service /etc/systemd/system/telegram_bot.service
 sudo systemctl daemon-reload
