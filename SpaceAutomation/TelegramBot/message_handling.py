@@ -13,6 +13,7 @@ import paho.mqtt.client as mqtt
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))  
 from Ringtones import RandomizeRingtone
 from WikiUsers import ActiveWikiUsers
+import github_updates
 from mqtt_handling import MqttHandler
 import bot_config as config
 
@@ -68,6 +69,15 @@ class CoMakingBot:
             MqttHandler.send('/CommonRoom/FDD/Text',text[:-1])
         else:
             bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
+
+    def github_events (bot,update,args):
+        if update.message.chat_id in config.authorized_group2:
+            if len(args) > 0:
+                message = github_updates.get_updates(int(args[0]))
+            else:
+                message = github_updates.get_updates()
+            bot.send_message(chat_id=update.message.chat_id, text = message)
+
     def _restart():
         args = sys.argv[:]
         args.insert(0, sys.executable)
@@ -83,6 +93,7 @@ class CoMakingBot:
         help_handler = CommandHandler('help', CoMakingBot.help)
         update_handler = CommandHandler('update', CoMakingBot.update)
         fdd_handler = CommandHandler('FDD',CoMakingBot.fdd,pass_args=True)
+        github_handler = CommandHandler('github',CoMakingBot.github_events,pass_args=True)
 
         CoMakingBot.dispatcher.add_handler(start_handler)
         CoMakingBot.dispatcher.add_handler(WikiUser_handler)
@@ -91,6 +102,7 @@ class CoMakingBot:
         CoMakingBot.dispatcher.add_handler(help_handler)
         CoMakingBot.dispatcher.add_handler(fdd_handler,1)
         CoMakingBot.dispatcher.add_handler(update_handler,2)
+        CoMakingBot.dispatcher.add_handler(github_handler,2)
     def run():
         CoMakingBot.updater.start_polling()
         print("bot started")
