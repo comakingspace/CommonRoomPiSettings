@@ -52,7 +52,7 @@ class CoMakingBot:
             bot.send_message(chat_id=update.message.chat_id, text="Starting the update...")
             output = subprocess.check_output(["git", "pull"])
             bot.send_message(chat_id=update.message.chat_id, text="The git output is: \n" + str(output))
-            _restart()
+            CoMakingBot._restart()
         else:
             bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
     def new_ringtone (bot,update):
@@ -76,7 +76,9 @@ class CoMakingBot:
                 message = github_updates.get_updates(int(args[0]))
             else:
                 message = github_updates.get_updates()
-            bot.send_message(chat_id=update.message.chat_id, text = message)
+            if message == None:
+                message = "Unfortunately, there is no update available in the given timeframe."
+            bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
 
     def _restart():
         args = sys.argv[:]
