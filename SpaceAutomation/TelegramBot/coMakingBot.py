@@ -1,3 +1,4 @@
+#!/usr/bin/python3 -u
 #Standard library imports.
 import sys
 import os

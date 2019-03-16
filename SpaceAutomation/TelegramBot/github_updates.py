@@ -1,3 +1,4 @@
+#!/usr/bin/python3 -u
 from github import Github
 from datetime import datetime, time, timedelta
 from github.GithubException import RateLimitExceededException
