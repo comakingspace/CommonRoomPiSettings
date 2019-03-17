@@ -14,7 +14,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from Ringtones import RandomizeRingtone
 from WikiUsers import ActiveWikiUsers
 import github_updates
-import google_calendar
+
 from mqtt_handling import MqttHandler
 import bot_config as config
 
@@ -72,6 +72,7 @@ class CoMakingBot:
             bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
 
     def events(bot,update,args):
+        import google_calendar
         if len(args) > 0:
                 message = google_calendar.get_events(int(args[0]))
         else:

@@ -1,9 +1,15 @@
 from datetime import datetime, time, timedelta
+import subprocess
+import os
+import sys
 try:
         from icalevents.icalevents import events
         import calendar
-except:
+except ImportError:
+        subprocess.call([sys.executable, "-m", "pip", "install", "-r" + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
+else:
         pass
+
 import telegram
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
@@ -14,6 +20,7 @@ import bot_config as config
 calendar_url = "https://calendar.google.com/calendar/ical/4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com/public/basic.ics"
 
 def get_events(days_to_check = 14):
+        
         #text = urlopen(calendar_url).read().decode('iso-8859-1')
         #c = Calendar(text)
         #c = Calendar(requests.get(calendar_url).text)
