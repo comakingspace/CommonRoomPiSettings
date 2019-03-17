@@ -13,7 +13,7 @@ try:
         from icalevents.icalevents import events
         import calendar
 except ImportError:
-        output = subprocess.check_output(["sudo pip3", "install -r" + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
+        output = subprocess.check_output(["pip3", "install -r" + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
         sent_message = updater.bot.send_message(chat_id = next(iter(config.authorized_group2)) , text = str(output), parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
 else:
         pass
