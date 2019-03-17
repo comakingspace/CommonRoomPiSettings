@@ -2,20 +2,23 @@ from datetime import datetime, time, timedelta
 import subprocess
 import os
 import sys
-try:
-        from icalevents.icalevents import events
-        import calendar
-except ImportError:
-        subprocess.call([sys.executable, "-m", "pip", "install", "-r" + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
-else:
-        pass
 
 import telegram
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
-
-
 import bot_config as config
+updater = Updater(token=config.token)
+
+try:
+        from icalevents.icalevents import events
+        import calendar
+except ImportError:
+        output = subprocess.check_output([sys.executable, "-m", "pip", "install", "-r" + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
+        sent_message = updater.bot.send_message(chat_id = next(iter(config.authorized_group2)) , text = str(output), parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+else:
+        pass
+
+
 
 calendar_url = "https://calendar.google.com/calendar/ical/4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com/public/basic.ics"
 
@@ -50,6 +53,6 @@ if __name__ == "__main__":
         message = get_events()
         print(message)
         if not message == None:
-                updater = Updater(token=config.token)
+                
                 message = f"Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next two weeks:{message}"
                 sent_message = updater.bot.send_message(chat_id = config.small_group_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
