@@ -59,4 +59,4 @@ if __name__ == "__main__":
     if not message == None:
         updater = Updater(token=config.token)
         message = "Hey all, here is the update of what happened since yesterday morning in our [Issue Tracker](https://github.com/comakingspace/do-something/issues):\n{}".format(message)
-        updater.bot.send_message(chat_id = config.large_group_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
+        updater.bot.send_message(chat_id = config.large_group_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)

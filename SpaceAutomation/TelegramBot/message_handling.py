@@ -14,6 +14,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from Ringtones import RandomizeRingtone
 from WikiUsers import ActiveWikiUsers
 import github_updates
+import google_calendar
 from mqtt_handling import MqttHandler
 import bot_config as config
 
@@ -70,6 +71,15 @@ class CoMakingBot:
         else:
             bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
 
+    def events(bot,update,args):
+        if len(args) > 0:
+                message = google_calendar.get_events(int(args[0]))
+        else:
+            message = google_calendar.get_events()
+        if message == None:
+            message = "Unfortunately, there is no event available in the given timeframe."
+        bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
+
     def github_events (bot,update,args):
         if update.message.chat_id in config.authorized_group2:
             if len(args) > 0:
@@ -96,6 +106,7 @@ class CoMakingBot:
         update_handler = CommandHandler('update', CoMakingBot.update)
         fdd_handler = CommandHandler('FDD',CoMakingBot.fdd,pass_args=True)
         github_handler = CommandHandler('github',CoMakingBot.github_events,pass_args=True)
+        google_handler = CommandHandler('events', CoMakingBot.events, pass_args=True)
 
         CoMakingBot.dispatcher.add_handler(start_handler)
         CoMakingBot.dispatcher.add_handler(WikiUser_handler)
@@ -103,6 +114,7 @@ class CoMakingBot:
         CoMakingBot.dispatcher.add_handler(new_ringtone_handler,1)
         CoMakingBot.dispatcher.add_handler(help_handler)
         CoMakingBot.dispatcher.add_handler(fdd_handler,1)
+        CoMakingBot.dispatcher.add_handler(google_handler)
         CoMakingBot.dispatcher.add_handler(update_handler,2)
         CoMakingBot.dispatcher.add_handler(github_handler,2)
     def run():
