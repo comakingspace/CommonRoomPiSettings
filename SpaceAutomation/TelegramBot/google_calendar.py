@@ -13,8 +13,14 @@ try:
         from icalevents.icalevents import events
         import calendar
 except ImportError:
-        output = subprocess.check_output(["pip3", "install -r" + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
-        sent_message = updater.bot.send_message(chat_id = next(iter(config.authorized_group2)) , text = str(output), parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+        output = subprocess.check_output([sys.executable, "-m", 'pip', 'install', "-r", str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
+        #pip = subprocess.call(["pip", "install -r " + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
+        #output = pip.stdout
+        #output = subprocess.check_output(["pip", "install -r " + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
+        chunk_size = 4000
+        for x in range (0,len(str(output)),chunk_size):
+                sent_message = updater.bot.send_message(chat_id = next(iter(config.authorized_group2)) , text = str(output)[x:x+chunk_size], parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                y=x
 else:
         pass
 
@@ -55,4 +61,4 @@ if __name__ == "__main__":
         if not message == None:
                 
                 message = f"Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next two weeks:{message}"
-                sent_message = updater.bot.send_message(chat_id = config.small_group_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                sent_message = updater.bot.send_message(chat_id = next(iter(config.authorized_group2)), text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
