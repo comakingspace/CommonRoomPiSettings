@@ -37,7 +37,7 @@ def get_events(days_to_check = 14):
 
         for event in (event for event in sorted(es) if ("Lunch Break Make" in event.summary or "Making Hours" in event.summary)):
                 if not "Opening Hours" in message:
-                        message = f"{message}\n*Opening Hours*:"
+                        message = "{}\n*Opening Hours*:".format(message)
                 name = event.summary[event.summary.find("("):]
                 message = "{}\n{}, {:02}.{:02}.{:04}\n    {:02}:{:02} - {:02}:{:02} {}".format(message, event.start.strftime('%A'), event.start.day, event.start.month, event.start.year, event.start.hour, event.start.minute, event.end.hour, event.end.minute, name)
 
