@@ -49,7 +49,8 @@ def get_events(days_to_check = 14):
                 #event.summary = event.summary.replace("Do-Something Hours", "DS-H")
                 if not "Special Events" in message:
                         message = f"{message}\n*Special Events:*"
-                message = f"{message}\n*{event.start.strftime('%A')}, {event.start.day:02}.{event.start.month:02}.{event.start.year:04}*\n    {event.start.hour:02}:{event.start.minute:02} - {event.end.hour:02}:{event.end.minute:02}\n    {event.summary}"
+                translator = {"[": r"\[", "]":r"]"} #only escape the opening [ because otherwise telegram will show \] in the message
+                message = f"{message}\n*{event.start.strftime('%A')}, {event.start.day:02}.{event.start.month:02}.{event.start.year:04}*\n    {event.start.hour:02}:{event.start.minute:02} - {event.end.hour:02}:{event.end.minute:02}\n    {event.summary.translate(str.maketrans(translator))}"
         #vobject code:
         #cal = next(vobject.readComponents(text))
         #for event in cal.vevent_list:
