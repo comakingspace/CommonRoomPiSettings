@@ -13,7 +13,7 @@ try:
         from icalevents.icalevents import events
         import calendar
 except ImportError:
-        output = subprocess.check_output([sys.executable, "-m", 'pip', 'install', "-r", str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
+        output = subprocess.check_output([sys.executable, "-m", 'pip', 'install', "-r", str(os.path.join(os.path.dirname(__file__), "..", "requirements.txt"))])
         #pip = subprocess.call(["pip", "install -r " + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
         #output = pip.stdout
         #output = subprocess.check_output(["pip", "install -r " + str(os.path.join(os.path.dirname(__file__), "..\\")) + "requirements.txt"])
