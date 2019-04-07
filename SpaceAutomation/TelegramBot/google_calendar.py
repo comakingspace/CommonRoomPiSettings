@@ -30,12 +30,16 @@ def get_events(days_to_check = 14):
         es = events(calendar_url,start=datetime.now(),end=in_two_weeks)
         message = ""
         for event in (event for event in sorted(es) if not ("Lunch Break Make" in event.summary or "Making Hours" in event.summary)):
+                event.start = event.start.astimezone()
+                event.end = event.end.astimezone()
                 if not "Special Events" in message:
                         message = "{}\n*Special Events:*".format(message)
                 translator = {"[": r"\[", "]":r"]"} #only escape the opening [ because otherwise telegram will show \] in the message
                 message = "{}\n*{}, {:02}.{:02}.{:04}*\n    {:02}:{:02} - {:02}:{:02}\n    {}".format(message, event.start.strftime('%A'), event.start.day, event.start.month, event.start.year, event.start.hour, event.start.minute, event.end.hour, event.end.minute, event.summary.translate(str.maketrans(translator)))
 
         for event in (event for event in sorted(es) if ("Lunch Break Make" in event.summary or "Making Hours" in event.summary)):
+                event.start = event.start.astimezone()
+                event.end = event.end.astimezone()
                 if not "Opening Hours" in message:
                         message = "{}\n*Opening Hours*:".format(message)
                 name = event.summary[event.summary.find("("):]
