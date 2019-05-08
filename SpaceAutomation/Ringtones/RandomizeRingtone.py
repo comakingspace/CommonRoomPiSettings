@@ -5,7 +5,7 @@ import random
 
 def getFiles(folder="/Ringtones"):
     #subscribe.callback(on_answer,"/DoorBell/Answers",hostname="comakingcontroller")
-    publish.single("/DoorBell/Control", "{'command':'listsd','payload':'{}'}".format(folder), hostname="comakingcontroller")
+    publish.single("/DoorBell/Control", "{{'command':'listsd','payload':'{}'}}".format(folder), hostname="comakingcontroller")
     answer = subscribe.simple("/DoorBell/Answers",msg_count=1, hostname="comakingcontroller")
     #test = "Hallo"
     listOfMusic = []
