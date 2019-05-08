@@ -7,16 +7,19 @@ def getFiles(folder="/Ringtones"):
     #subscribe.callback(on_answer,"/DoorBell/Answers",hostname="comakingcontroller")
     publish.single("/DoorBell/Control", "{{'command':'listsd','payload':'{}'}}".format(folder), hostname="comakingcontroller")
     answer = subscribe.simple("/DoorBell/Answers",msg_count=1, hostname="comakingcontroller")
+    
     #test = "Hallo"
     listOfMusic = []
-    answerAsString = answer.payload.decode("utf-8")
+    answerAsString = answer.payload.decode('utf-8',errors='ignore')
+    answerAsString = answerAsString.replace('\t','')
     if (answerAsString[:10]=='SD Content'):
         listOfFiles = answerAsString.split("\n")
         for file in listOfFiles:
+            if file != '' and file[0] == ' ':
+                file = file[1:]
             print(file)
             if (file.find(".mp3") != -1):
                 listOfMusic.append(file[:file.find(".mp3")+4])
-    #print("%s %s" % (answer.topic, answer.payload))
     return listOfMusic
 
 def on_answer(client, userdata, message):
