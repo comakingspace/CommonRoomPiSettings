@@ -139,7 +139,7 @@ class CoMakingBot:
         CoMakingBot.dispatcher.add_handler(github_handler,2)
 
         bell_handler = CommandHandler('doorbell',CoMakingBot.bell_sounds)
-        CoMakingBot.dispatcher.add_handler(bell_handler)
+        CoMakingBot.dispatcher.add_handler(bell_handler,2)
         bell_callback_handler = CallbackQueryHandler(CoMakingBot.buttonReply)
         CoMakingBot.dispatcher.add_handler(bell_callback_handler)
         #print("handlers registered")
