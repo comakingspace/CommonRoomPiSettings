@@ -98,8 +98,8 @@ class CoMakingBot:
     def bell_sounds (bot, update):
         #print("got the bell command")
         #bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
-        ringtones = ["test"]
-        #ringtones = RandomizeRingtone.getFiles("/Ringtones")
+        #ringtones = ["test"]
+        ringtones = RandomizeRingtone.getFiles("/Ringtones")
         keyboard = []
         message = "ringtones:"
         #keyboard.append([InlineKeyboardButton("test",callback_data="test")])
