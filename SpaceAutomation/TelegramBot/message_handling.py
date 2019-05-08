@@ -112,7 +112,7 @@ class CoMakingBot:
     def buttonReply (bot, update):
         query = update.callback_query
         message = "{'command': 'play','payload': '{}'}".format(query.data)
-
+        bot.send_message(chat_id=update.message.chat_id, text=message) 
         query.edit_message_text(text="Selected option: {}".format(query.data))
 
     def _restart():
