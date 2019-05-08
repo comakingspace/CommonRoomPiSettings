@@ -98,10 +98,11 @@ class CoMakingBot:
     def bell_sounds (bot, update):
         #print("got the bell command")
         #bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
-        ringtones = RandomizeRingtone.getFiles("/Ringtones")
+        ringtones = ["test"]
+        #ringtones = RandomizeRingtone.getFiles("/Ringtones")
         keyboard = []
         message = "ringtones:"
-        keyboard.append([InlineKeyboardButton("test",callback_data="test")])
+        #keyboard.append([InlineKeyboardButton("test",callback_data="test")])
         for ringtone in ringtones:
             message = message + "\n " + ringtone
             keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
@@ -110,11 +111,11 @@ class CoMakingBot:
         update.message.reply_text('Please choose:', reply_markup=reply_markup)
 
     def buttonReply (bot, update):
-        bot.send_message(chat_id=update.message.chat_id, text="button got pressed")
-        #query = update.callback_query
-        #message = "{{'command': 'play','payload': '{}'}}".format(query.data)
-        #bot.send_message(chat_id=update.message.chat_id, text=message)
-        #query.edit_message_text(text="Selected option: {}".format(query.data))
+        #bot.send_message(chat_id=update.callback_query.from_user.id, text="button got pressed")
+        query = update.callback_query
+        message = "{{'command': 'play','payload': '{}'}}".format(query.data)
+        bot.send_message(chat_id=update.callback_query.from_user.id, text=message)
+        query.edit_message_text(text="Selected option: {}".format(query.data))
 
     def _restart():
         args = sys.argv[:]
