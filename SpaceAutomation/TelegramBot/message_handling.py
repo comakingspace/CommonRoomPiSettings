@@ -99,7 +99,7 @@ class CoMakingBot:
         #print("got the bell command")
         #bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
         #ringtones = ["test"]
-        ringtones = RandomizeRingtone.getFiles("/Ringtones")
+        ringtones = RandomizeRingtone.getFiles("/")
         keyboard = []
         message = "ringtones:"
         #keyboard.append([InlineKeyboardButton("test",callback_data="test")])
