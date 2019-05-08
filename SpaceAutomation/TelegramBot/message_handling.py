@@ -101,7 +101,7 @@ class CoMakingBot:
         ringtones = RandomizeRingtone.getFiles("/Ringtones")
         keyboard = []
         message = "ringtones:"
-
+        keyboard.append([InlineKeyboardButton("test",callback_data="test")])
         for ringtone in ringtones:
             message = message + "\n " + ringtone
             keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
@@ -111,10 +111,10 @@ class CoMakingBot:
 
     def buttonReply (bot, update):
         bot.send_message(chat_id=update.message.chat_id, text="button got pressed")
-        query = update.callback_query
-        message = "{{'command': 'play','payload': '{}'}}".format(query.data)
-        bot.send_message(chat_id=update.message.chat_id, text=message)
-        query.edit_message_text(text="Selected option: {}".format(query.data))
+        #query = update.callback_query
+        #message = "{{'command': 'play','payload': '{}'}}".format(query.data)
+        #bot.send_message(chat_id=update.message.chat_id, text=message)
+        #query.edit_message_text(text="Selected option: {}".format(query.data))
 
     def _restart():
         args = sys.argv[:]
