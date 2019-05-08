@@ -114,6 +114,7 @@ class CoMakingBot:
         #bot.send_message(chat_id=update.callback_query.from_user.id, text="button got pressed")
         query = update.callback_query
         message = "{{'command': 'play','payload': '{}'}}".format(query.data)
+        MqttHandler.send("/DoorBell/Control",message)
         bot.send_message(chat_id=update.callback_query.from_user.id, text=message)
         query.edit_message_text(text="Selected option: {}".format(query.data))
 
