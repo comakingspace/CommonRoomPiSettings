@@ -32,7 +32,7 @@ def setNewRingtone(newFile):
     publish.single("/DoorBell/Control", "{{'command':'selectringfile','payload':'{}'}}".format(newFile), hostname="comakingcontroller")
 
 def randomize_ringtone():
-    setNewRingtone(randomize_files(getRingtones()))
+    setNewRingtone(randomize_files(getFiles()))
 
 if __name__ == "__main__":
     #possibleFiles = getRingtones()
