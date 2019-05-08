@@ -97,17 +97,17 @@ class CoMakingBot:
 
     def bell_sounds (bot, update):
         #print("got the bell command")
-        bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
+        #bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
         ringtones = RandomizeRingtone.getFiles()
         keyboard = []
         message = "ringtones:"
 
         for ringtone in ringtones:
-            message = message + "\n /" + ringtone
-            #keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
-        bot.send_message(chat_id=update.message.chat_id, text=message) 
-        #reply_markup = InlineKeyboardMarkup(keyboard)
-        #update.message.reply_text('Please choose:', reply_markup=reply_markup)
+            message = message + "\n " + ringtone
+            keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
+        #bot.send_message(chat_id=update.message.chat_id, text=message) 
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        update.message.reply_text('Please choose:', reply_markup=reply_markup)
 
     def buttonReply (bot, update):
         query = update.callback_query
