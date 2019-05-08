@@ -3,9 +3,9 @@ import paho.mqtt.subscribe as subscribe
 import paho.mqtt
 import random
 
-def getRingtones():
+def getFiles(folder="/Ringtones"):
     #subscribe.callback(on_answer,"/DoorBell/Answers",hostname="comakingcontroller")
-    publish.single("/DoorBell/Control", "{'command':'listsd','payload':'/Ringtones'}", hostname="comakingcontroller")
+    publish.single("/DoorBell/Control", "{'command':'listsd','payload':'{}'}".format(folder), hostname="comakingcontroller")
     answer = subscribe.simple("/DoorBell/Answers",msg_count=1, hostname="comakingcontroller")
     #test = "Hallo"
     listOfMusic = []

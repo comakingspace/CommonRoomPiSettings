@@ -5,8 +5,9 @@ import subprocess
 
 #Related third party imports.
 import telegram
-from telegram.ext import Updater
-from telegram.ext import CommandHandler
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
 import paho.mqtt.client as mqtt
 
 #Local application/library specific imports.
@@ -26,16 +27,19 @@ class CoMakingBot:
     def start (bot, update):
         message = "Thank you for contacting me. Your Chat ID is: " + str(update.message.chat_id) + "\n Right now, I am listening to the following messages:"
         for handler in CoMakingBot.dispatcher.handlers[0]:
-            #message = message + "\n [/" + handler.command[0] + "](tg://bot_command?command=" + handler.command[0]
-            message = message + "\n /" + handler.command[0]
+            if type(handler) == telegram.ext.commandhandler.CommandHandler:
+                #message = message + "\n [/" + handler.command[0] + "](tg://bot_command?command=" + handler.command[0]
+                message = message + "\n /" + handler.command[0]
         if update.message.chat_id in config.authorized_group1:
             message = message + "\n You are also authorized for the following commands from group 1:"
             for handler in CoMakingBot.dispatcher.handlers[1]:
-                message = message + "\n /" + handler.command[0]
+                if type(handler) == telegram.ext.commandhandler.CommandHandler:
+                    message = message + "\n /" + handler.command[0]
         if update.message.chat_id in config.authorized_group2:
             message = message + "\n You are also authorized for the following commands from group 2:"
             for handler in CoMakingBot.dispatcher.handlers[2]:
-                message = message + "\n /" + handler.command[0]
+                if type(handler) == telegram.ext.commandhandler.CommandHandler:
+                    message = message + "\n /" + handler.command[0]
         bot.send_message(chat_id=update.message.chat_id, text=message)  
     def wikiUser (bot, update):
         UserList = ActiveWikiUsers.getActiveUsers()
@@ -91,6 +95,21 @@ class CoMakingBot:
                 message = "Unfortunately, there is no update available in the given timeframe."
             bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
 
+    def bell_sounds (bot, update):
+        #print("got the bell command")
+        ringtones = RandomizeRingtone.getFiles("")
+        keyboard = []
+        for ringtone in ringtones:
+            keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        update.message.reply_text('Please choose:', reply_markup=reply_markup)
+
+    def buttonReply (bot, update):
+        query = update.callback_query
+        message = "{'command': 'play','payload': '{}'}".format(query.data)
+
+        query.edit_message_text(text="Selected option: {}".format(query.data))
+
     def _restart():
         args = sys.argv[:]
         args.insert(0, sys.executable)
@@ -118,6 +137,16 @@ class CoMakingBot:
         CoMakingBot.dispatcher.add_handler(google_handler)
         CoMakingBot.dispatcher.add_handler(update_handler,2)
         CoMakingBot.dispatcher.add_handler(github_handler,2)
+
+        bell_handler = CommandHandler('doorbell',CoMakingBot.bell_sounds)
+        CoMakingBot.dispatcher.add_handler(bell_handler)
+        bell_callback_handler = CallbackQueryHandler(CoMakingBot.buttonReply)
+        CoMakingBot.dispatcher.add_handler(bell_callback_handler)
+        #print("handlers registered")
     def run():
         CoMakingBot.updater.start_polling()
         print("bot started")
+
+if __name__ == "__main__":
+    CoMakingBot.setup()
+    CoMakingBot.run()
