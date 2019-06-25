@@ -34,11 +34,11 @@ def get_updates(days_to_check = 1):
                     #do nothing
                     pass
                 elif event.event == 'assigned':
-                    message = "{}{} got {} to [Issue {}]({}) ({})\n".format(message, event.actor.login, event.event, issue.number, issue.html_url, issue.title)
+                    #message = "{}{} got {} to [Issue {}]({}) ({})\n".format(message, event.actor.login, event.event, issue.number, issue.html_url, issue.title)
                 elif event.event == 'reopened':
                     message = "{}[Issue {}]({}) ({}) got {} by {}\n".format(message, issue.number, issue.html_url, issue.title, event.event, event.actor.login)
                 elif event.event == 'unassigned':
-                    message = "{}{} got {} from [Issue {}]({}) ({})\n".format(message, event.actor.login, event.event, issue.number, issue.html_url, issue.title)
+                    #message = "{}{} got {} from [Issue {}]({}) ({})\n".format(message, event.actor.login, event.event, issue.number, issue.html_url, issue.title)
                 elif event.event == 'renamed':
                     message = "{}[Issue {}]({}) got {} to {}\n".format(message, issue.number, issue.html_url, event.event, issue.title)
                 else:
