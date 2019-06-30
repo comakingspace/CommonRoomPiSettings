@@ -2,10 +2,10 @@
 import sys
 import os
 import subprocess
-
+import threading
 #Related third party imports.
 import telegram
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, run_async
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 import paho.mqtt.client as mqtt
@@ -24,6 +24,7 @@ class CoMakingBot:
     dispatcher = updater.dispatcher
     mqtt_client = mqtt.Client("Telegram_Bot")
 
+    @run_async
     def start (bot, update):
         message = "Thank you for contacting me. Your Chat ID is: " + str(update.message.chat_id) + "\n Right now, I am listening to the following messages:"
         for handler in CoMakingBot.dispatcher.handlers[0]:
@@ -41,17 +42,21 @@ class CoMakingBot:
                 if type(handler) == telegram.ext.commandhandler.CommandHandler:
                     message = message + "\n /" + handler.command[0]
         bot.send_message(chat_id=update.message.chat_id, text=message)  
+    @run_async
     def wikiUser (bot, update):
         UserList = ActiveWikiUsers.getActiveUsers()
         del UserList['newlen']
         del UserList['ns']
         del UserList['oldlen']    
         bot.send_message(chat_id=update.message.chat_id, text = str(UserList))
+    @run_async
     def help (bot, update):
         message = "The documentation of this bot might soon be found in the CoMakingSpace Wiki. \n For the moment, please refer to /start"
         bot.send_message(chat_id=update.message.chat_id, text=message)
+    @run_async
     def nerven (bot,update):
         bot.send_message(chat_id=update.message.chat_id, text="Sei einfach du selbst...")
+    
     def update (bot,update):
         if update.message.chat_id in config.authorized_group2:
             bot.send_message(chat_id=update.message.chat_id, text="Starting the update...")
@@ -60,12 +65,13 @@ class CoMakingBot:
             CoMakingBot._restart()
         else:
             bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
+    @run_async
     def new_ringtone (bot,update):
         if update.message.chat_id in config.authorized_group1:
             RandomizeRingtone.randomize_ringtone()
         else:
             bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
-
+    @run_async
     def fdd (bot,update,args):
         if update.message.chat_id in config.authorized_group1:
             text = ""
@@ -74,7 +80,7 @@ class CoMakingBot:
             MqttHandler.send('/CommonRoom/FDD/Text',text[:-1])
         else:
             bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
-
+    @run_async
     def events(bot,update,args):
         import google_calendar
         if len(args) > 0:
@@ -84,7 +90,7 @@ class CoMakingBot:
         if message == None:
             message = "Unfortunately, there is no event available in the given timeframe."
         bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
-
+    @run_async
     def github_events (bot,update,args):
         if update.message.chat_id in config.authorized_group2:
             if len(args) > 0:
@@ -94,7 +100,7 @@ class CoMakingBot:
             if message == None:
                 message = "Unfortunately, there is no update available in the given timeframe."
             bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
-
+    @run_async
     def bell_sounds (bot, update):
         #print("got the bell command")
         #bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
@@ -109,7 +115,9 @@ class CoMakingBot:
         #bot.send_message(chat_id=update.message.chat_id, text=message) 
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text('Please choose:', reply_markup=reply_markup)
-
+        #thread1 = threading.Thread(target = CoMakingBot._getandsendtones, args = (bot,update))
+        #thread1.start()
+    @run_async
     def buttonReply (bot, update):
         #bot.send_message(chat_id=update.callback_query.from_user.id, text="button got pressed")
         query = update.callback_query
@@ -118,6 +126,20 @@ class CoMakingBot:
         bot.send_message(chat_id=update.callback_query.from_user.id, text=message)
         #query.edit_message_text(text="Selected option: {}".format(query.data))
 
+    def _getandsendtones(bot, update):
+        #print("got the bell command")
+        #bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
+        #ringtones = ["test"]
+        ringtones = RandomizeRingtone.getFiles("/")
+        keyboard = []
+        message = "ringtones:"
+        #keyboard.append([InlineKeyboardButton("test",callback_data="test")])
+        for ringtone in ringtones:
+            message = message + "\n " + ringtone
+            keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
+        #bot.send_message(chat_id=update.message.chat_id, text=message) 
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        update.message.reply_text('Please choose:', reply_markup=reply_markup)
     def _restart():
         args = sys.argv[:]
         args.insert(0, sys.executable)
