@@ -19,10 +19,10 @@ class MqttHandler:
     def on_doorbell_answer (client, userdata, msg):
         payload = str(msg.payload)
         if (payload.startswith("b'The ringtone")):
-            chat = next(iter(config.authorized_group2))
-            #chat = config.large_group_id
-            #chat = config.small_group_id  
-            MqttHandler.send_on_telegram(chat, "The new ringtone is: " + payload[31:-1])
+            for admin in config.authorized_group2:
+                #chat = config.large_group_id
+                #chat = config.small_group_id  
+                MqttHandler.send_on_telegram(chat, "The new ringtone is: " + payload[31:-1])
         print(msg.topic+" "+str(msg.payload))
 
     def on_mqtt_connect(client, userdata, flags, rc):
