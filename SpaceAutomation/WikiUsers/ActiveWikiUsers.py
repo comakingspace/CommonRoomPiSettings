@@ -28,7 +28,7 @@ def getActiveUsers():
     changes['changedlen'] = abs(changes['newlen'] - changes['oldlen'])
     changes.loc[(changes['type']=='log') & (changes['title'].str.startswith('File')),'changedlen']=300
     changes['count'] = 1
-    sorted_users = changes.groupby('user').sum().sort_values('changedlen',ascending=False)
+    sorted_users = changes.groupby('user').sum().sort_values('changedlen',ascending=False).reset_index()
     return sorted_users
 
 if __name__ == "__main__":
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     if len(sorted_users) < user_count:
         user_count = len(sorted_users)
     for i in range(0,user_count):
-        top_3_users = "%s %i.%s" % (top_3_users,i+1,sorted_users.iloc[i].name)
+        top_3_users = "%s %i.%s" % (top_3_users,i+1,sorted_users.iloc[i]['user'])
     try:
         publish.single("/CommonRoom/FDD/Text", top_3_users, hostname="comakingcontroller")
     except:

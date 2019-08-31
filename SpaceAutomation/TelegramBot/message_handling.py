@@ -15,7 +15,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from Ringtones import RandomizeRingtone
 from WikiUsers import ActiveWikiUsers
 import github_updates
-
+import pandas as pd
 from mqtt_handling import MqttHandler
 import bot_config as config
 
@@ -47,8 +47,12 @@ class CoMakingBot:
         UserList = ActiveWikiUsers.getActiveUsers()
         del UserList['newlen']
         del UserList['ns']
-        del UserList['oldlen']    
-        bot.send_message(chat_id=update.message.chat_id, text = str(UserList))
+        del UserList['oldlen']
+        pd.set_option("display.max_colwidth", 10000)
+        message = "Here is the latest [CoMakingSpace Wiki Leaderboard](https://wiki.comakingspace.de/Special:RecentChanges):\nUser \t Changed bytes \t Number of changes"
+        UserString = UserList.to_string(header=False,index=False, formatters = {"user": "[{0}](https://wiki.comakingspace.de/User:{0})".format})
+        message = f"{message}\n{UserString}"
+        bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
     @run_async
     def help (bot, update):
         message = "The documentation of this bot might soon be found in the CoMakingSpace Wiki. \n For the moment, please refer to /start"

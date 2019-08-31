@@ -53,7 +53,7 @@ if __name__ == "__main__":
         print(message)
         if not message == None:
                 message = "Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next two weeks:{}".format(message)
-                #chat = next(iter(config.authorized_group2))
-                chat = config.large_group_id
+                chat = next(iter(config.authorized_group2))
+                #chat = config.large_group_id
                 #chat = config.small_group_id
-                sent_message = updater.bot.send_message(chat_id = chat, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                #sent_message = updater.bot.send_message(chat_id = chat, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
