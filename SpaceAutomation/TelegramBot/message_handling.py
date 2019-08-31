@@ -48,10 +48,19 @@ class CoMakingBot:
         del UserList['newlen']
         del UserList['ns']
         del UserList['oldlen']
-        pd.set_option("display.max_colwidth", 10000)
-        message = "Here is the latest [CoMakingSpace Wiki Leaderboard](https://wiki.comakingspace.de/Special:RecentChanges):\nUser \t Changed bytes \t Number of changes"
-        UserString = UserList.to_string(header=False,index=False, formatters = {"user": "[{0}](https://wiki.comakingspace.de/User:{0})".format})
-        message = f"{message}\n{UserString}"
+        # The following code gives bad results (many spaces left to the user names)
+        # This is described in https://github.com/pandas-dev/pandas/issues/9784
+        # Should hopefully be fixed in one of the next pandas updates.
+        #pd.set_option("display.max_colwidth", 10000)
+        #message = "Here is the latest [CoMakingSpace Wiki Leaderboard](https://wiki.comakingspace.de/Special:RecentChanges):\nUser \t Changed bytes \t Number of changes"
+        #UserString = UserList.to_string(header=False,index=False, formatters = {"user": "[{0}](https://wiki.comakingspace.de/User:{0})".format})
+        ##UserString = UserList.to_html(header=True,index=False, formatters = {"user": "[{0}](https://wiki.comakingspace.de/User:{0})".format})
+        #message = f"{message}\n{UserString}"
+
+        #Workaround until the above mentioned issue is fixed
+        message = "Here is the latest [CoMakingSpace Wiki Leaderboard](https://wiki.comakingspace.de/Special:RecentChanges):\nUser: Changed bytes (Number of changes)"
+        for index,user in UserList.iterrows():
+            message = f"{message}\n[{user['user']}](https://wiki.comakingspace.de/User:{user['user']}): {user['changedlen']} ({user['count']})"
         bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
     @run_async
     def help (bot, update):
