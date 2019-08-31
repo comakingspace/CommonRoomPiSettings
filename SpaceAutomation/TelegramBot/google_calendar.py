@@ -7,7 +7,6 @@ import telegram
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 import bot_config as config
-updater = Updater(token=config.token)
 
 try:
         from icalevents.icalevents import events
@@ -33,9 +32,9 @@ def get_events(days_to_check = 14):
                 event.start = event.start.astimezone()
                 event.end = event.end.astimezone()
                 if not "Special Events" in message:
-                        message = "{}\n*Special Events:*".format(message)
+                        message = f"{message}\n*Special Events:*"
                 translator = {"[": r"\[", "]":r"]"} #only escape the opening [ because otherwise telegram will show \] in the message
-                message = "{}\n*{}, {:02}.{:02}.{:04}*\n    {:02}:{:02} - {:02}:{:02}\n    {}".format(message, event.start.strftime('%A'), event.start.day, event.start.month, event.start.year, event.start.hour, event.start.minute, event.end.hour, event.end.minute, event.summary.translate(str.maketrans(translator)))
+                message = f"{message}\n*{event.start.strftime('%A')}, {event.start.day:02}.{event.start.month:02}.{event.start.year:04}*\n    {event.start.hour:02}:{event.start.minute:02} - {event.end.hour:02}:{event.end.minute:02}\n    {event.summary.translate(str.maketrans(translator))}"
 
         for event in (event for event in sorted(es) if ("Lunch Break Make" in event.summary or "Making Hours" in event.summary)):
                 event.start = event.start.astimezone()
@@ -43,17 +42,18 @@ def get_events(days_to_check = 14):
                 if not "Opening Hours" in message:
                         message = "{}\n*Opening Hours*:".format(message)
                 name = event.summary[event.summary.find("("):]
-                message = "{}\n{}, {:02}.{:02}.{:04}\n    {:02}:{:02} - {:02}:{:02} {}".format(message, event.start.strftime('%A'), event.start.day, event.start.month, event.start.year, event.start.hour, event.start.minute, event.end.hour, event.end.minute, name)
+                message = f"{message}\n{event.start.strftime('%A')}, {event.start.day:02}.{event.start.month:02}.{event.start.year:04}\n    {event.start.hour:02}:{event.start.minute:02} - {event.end.hour:02}:{event.end.minute:02} {name}"
 
         return message
-
 
 if __name__ == "__main__":
         message = get_events()
         print(message)
         if not message == None:
-                message = "Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next two weeks:{}".format(message)
-                chat = next(iter(config.authorized_group2))
-                #chat = config.large_group_id
+                updater = Updater(token=config.token)
+                message = f"Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next two weeks:{message}"
+                chat = config.large_group_id
                 #chat = config.small_group_id
                 #sent_message = updater.bot.send_message(chat_id = chat, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                for admin in config.authorized_group2:
+                        sent_message = updater.bot.send_message(chat_id = admin, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)

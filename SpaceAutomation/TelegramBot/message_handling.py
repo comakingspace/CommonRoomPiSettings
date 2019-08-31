@@ -7,17 +7,17 @@ import threading
 import telegram
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, run_async
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
 import paho.mqtt.client as mqtt
+import pandas as pd
 
 #Local application/library specific imports.
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))  
 from Ringtones import RandomizeRingtone
 from WikiUsers import ActiveWikiUsers
 import github_updates
-import pandas as pd
 from mqtt_handling import MqttHandler
 import bot_config as config
+
 
 class CoMakingBot:
     updater = Updater(token=config.token)
@@ -26,22 +26,25 @@ class CoMakingBot:
 
     @run_async
     def start (bot, update):
-        message = "Thank you for contacting me. Your Chat ID is: " + str(update.message.chat_id) + "\n Right now, I am listening to the following messages:"
+        message = f"Thank you for contacting me. Your Chat ID is: {update.message.chat_id}"
+        message = f"{message}\n\nThis bot is for the [CoMakingSpace Heidelberg](https://comakingspace.org). You can find the documentation in the [wiki](https://https://wiki.comakingspace.de/Telegram_Group)."
+        bot.send_message(chat_id=update.message.chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
+        message = "Right now, I am listening to the following messages:"
         for handler in CoMakingBot.dispatcher.handlers[0]:
             if type(handler) == telegram.ext.commandhandler.CommandHandler:
                 #message = message + "\n [/" + handler.command[0] + "](tg://bot_command?command=" + handler.command[0]
-                message = message + "\n /" + handler.command[0]
+                message = f"{message} \n /{handler.command[0]}"
         if update.message.chat_id in config.authorized_group1:
             message = message + "\n You are also authorized for the following commands from group 1:"
             for handler in CoMakingBot.dispatcher.handlers[1]:
                 if type(handler) == telegram.ext.commandhandler.CommandHandler:
-                    message = message + "\n /" + handler.command[0]
+                    message = f"{message} \n /{handler.command[0]}"
         if update.message.chat_id in config.authorized_group2:
             message = message + "\n You are also authorized for the following commands from group 2:"
             for handler in CoMakingBot.dispatcher.handlers[2]:
                 if type(handler) == telegram.ext.commandhandler.CommandHandler:
-                    message = message + "\n /" + handler.command[0]
-        bot.send_message(chat_id=update.message.chat_id, text=message)  
+                    message = f"{message} \n /{handler.command[0]}"
+        bot.send_message(chat_id=update.message.chat_id, text=message)
     @run_async
     def wikiUser (bot, update):
         UserList = ActiveWikiUsers.getActiveUsers()
@@ -64,8 +67,8 @@ class CoMakingBot:
         bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
     @run_async
     def help (bot, update):
-        message = "The documentation of this bot might soon be found in the CoMakingSpace Wiki. \n For the moment, please refer to /start"
-        bot.send_message(chat_id=update.message.chat_id, text=message)
+        message = "The documentation of this bot can be found in the [CoMakingSpace Wiki](https://wiki.comakingspace.de/Telegram_Group).\nIf you want to get the current list of commands, please use /start"
+        bot.send_message(chat_id=update.message.chat_id, text=message, parse_mode=telegram.ParseMode.MARKDOWN)
     @run_async
     def nerven (bot,update):
         bot.send_message(chat_id=update.message.chat_id, text="Sei einfach du selbst...")

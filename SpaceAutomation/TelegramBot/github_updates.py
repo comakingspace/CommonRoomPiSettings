@@ -18,31 +18,31 @@ def get_updates(days_to_check = 1):
             #print(issue)
             #get the comments
             if issue.created_at > yesterday:
-                 message = "{}[Issue {}]({}) ({}) got created by {}\n".format(message, issue.number, issue.html_url, issue.title, issue.user.login)
+                 message = f"{message}[Issue {issue.number}]({issue.html_url}) ({issue.title}) got created by {issue.user.login}\n"
             if issue.comments > 0:
                     comments = issue.get_comments(since=yesterday)
                     if comments.totalCount > 0:
-                            message = "{}[Issue {}]({}) ({}) got {} new comment(s)\n".format(message, issue.number, issue.html_url, issue.title, comments.totalCount)
+                            message = f"{message}[Issue {issue.number}]({issue.html_url}) ({issue.title}) got {comments.totalCount} new comment(s)\n"
             events = issue.get_events()
             for event in (event for event in events if event.created_at > yesterday):
                 if event.event == 'mentioned':
                     #do nothing
                     pass
                 elif event.event == 'closed':
-                    message = "{}[Issue {}]({}) ({}) got {} by {}\n".format(message, issue.number, issue.html_url, issue.title, event.event, event.actor.login)
+                    message = f"{message}[Issue {issue.number}]({issue.html_url}) ({issue.title}) got {event.event} by {event.actor.login}\n"
                 elif event.event == 'subscribed':
                     #do nothing
                     pass
                 elif event.event == 'assigned':
-                    #message = "{}{} got {} to [Issue {}]({}) ({})\n".format(message, event.actor.login, event.event, issue.number, issue.html_url, issue.title)
+                    #message = f"{message}{event.actor.login} got {event.event} to [Issue {issue.number}]({issue.html_url}) ({issue.title})\n"
                     pass
                 elif event.event == 'reopened':
-                    message = "{}[Issue {}]({}) ({}) got {} by {}\n".format(message, issue.number, issue.html_url, issue.title, event.event, event.actor.login)
+                    message = f"{message}[Issue {issue.number}]({issue.html_url}) ({issue.title}) got {event.event} by {event.actor.login}\n"
                 elif event.event == 'unassigned':
-                    #message = "{}{} got {} from [Issue {}]({}) ({})\n".format(message, event.actor.login, event.event, issue.number, issue.html_url, issue.title)
+                    #message = f"{message}{event.actor.login} got {event.event} from [Issue {issue.number}]({issue.html_url}) ({issue.title})\n"
                     pass
                 elif event.event == 'renamed':
-                    message = "{}[Issue {}]({}) got {} to {}\n".format(message, issue.number, issue.html_url, event.event, issue.title)
+                    message = f"{message}[Issue {issue.number}]({issue.html_url}) got {event.event} to {issue.title}\n"
                 else:
                     #do nothing
                     pass
@@ -60,5 +60,9 @@ if __name__ == "__main__":
     print(message)
     if not message == None:
         updater = Updater(token=config.token)
-        message = "Hey all, here is the update of what happened since yesterday morning in our [Issue Tracker](https://github.com/comakingspace/do-something/issues):\n{}".format(message)
-        updater.bot.send_message(chat_id = config.large_group_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+        message = "Hey all, here is the update of what happened since yesterday morning in our [Issue Tracker](https://github.com/comakingspace/do-something/issues):\n{message}"
+        #chat = config.large_group_id
+        #chat = config.small_group_id
+        #updater.bot.send_message(chat_id = chat, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+        for admin in config.authorized_group2:
+                        sent_message = updater.bot.send_message(chat_id = admin, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
