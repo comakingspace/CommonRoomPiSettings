@@ -52,8 +52,10 @@ if __name__ == "__main__":
         if not message == None:
                 updater = Updater(token=config.token)
                 message = f"Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next two weeks:{message}"
-                chat = config.large_group_id
-                #chat = config.small_group_id
-                #sent_message = updater.bot.send_message(chat_id = chat, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
-                for admin in config.authorized_group2:
-                        sent_message = updater.bot.send_message(chat_id = admin, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                if config.mode =="debug":
+                        for admin in config.authorized_group2:
+                                sent_message = updater.bot.send_message(chat_id = admin, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                else:
+                        chat = config.large_group_id
+                        #chat = config.small_group_id
+                        sent_message = updater.bot.send_message(chat_id = chat, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)

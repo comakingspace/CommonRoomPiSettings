@@ -3,6 +3,8 @@ token = 'YOUR TELEGRAM BOT TOKEN'
 mqtt_host = "YOUR MQTT BROKER"
 small_group_id = "THE CHAT_ID OF THE SMALL GROUP"
 large_group_id = "THE CHAT_ID OF THE LARGE GROUP"
+#note: set mode to "debug" on your local machine.
+mode = ""
 
 authorized_group1 = {12345,67890}
 authorized_group2 = {12345}
