@@ -60,7 +60,7 @@ if __name__ == "__main__":
     print(message)
     if not message == None:
         updater = Updater(token=config.token)
-        message = "Hey all, here is the update of what happened since yesterday morning in our [Issue Tracker](https://github.com/comakingspace/do-something/issues):\n{message}"
+        message = f"Hey all, here is the update of what happened since yesterday morning in our [Issue Tracker](https://github.com/comakingspace/do-something/issues):\n{message}"
         if config.mode =="debug":
             for admin in config.authorized_group2:
                 sent_message = updater.bot.send_message(chat_id = admin, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
