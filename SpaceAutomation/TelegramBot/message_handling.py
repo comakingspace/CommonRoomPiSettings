@@ -139,7 +139,7 @@ class CoMakingBot:
         query = update.callback_query
         message = "{{'command': 'play','payload': '{}'}}".format(query.data)
         MqttHandler.send("/DoorBell/Control",message)
-        bot.send_message(chat_id=update.callback_query.from_user.id, text=message)
+        bot.send_message(chat_id=update.callback_query.from_user.id, text=f"Played the file {query.data}")
         #query.edit_message_text(text="Selected option: {}".format(query.data))
 
     def _getandsendtones(bot, update):

@@ -31,7 +31,7 @@ class MqttHandler:
     
     def send_on_telegram(chat, message):
         from message_handling import CoMakingBot
-        CoMakingBot.updater.bot.send_message(chat_id=chat, text=message)
+        CoMakingBot.updater.bot.send_message(chat_id=chat, text=message, disable_notification=True)
 
     def send(topic, message):
         MqttHandler.mqtt_client.publish(topic,message)
