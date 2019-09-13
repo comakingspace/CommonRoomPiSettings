@@ -108,29 +108,27 @@ class CoMakingBot:
         bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
     @run_async
     def github_events (bot,update,args):
-        if update.message.chat_id in config.authorized_group2:
-            if len(args) > 0:
-                message = github_updates.get_updates(int(args[0]))
-            else:
-                message = github_updates.get_updates()
-            if message == None:
-                message = "Unfortunately, there is no update available in the given timeframe."
-            bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
+        if len(args) > 0:
+            message = github_updates.get_updates(int(args[0]))
+        else:
+            message = github_updates.get_updates()
+        if message == None:
+            message = "Unfortunately, there is no update available in the given timeframe."
+        bot.send_message(chat_id=update.message.chat_id, text = message, parse_mode=telegram.ParseMode.MARKDOWN)
+   
     @run_async
     def bell_sounds (bot, update):
-        #print("got the bell command")
-        #bot.send_message(chat_id=update.message.chat_id, text="got the bell command") 
-        #ringtones = ["test"]
-        ringtones = RandomizeRingtone.getFiles("/")
-        keyboard = []
-        message = "ringtones:"
-        #keyboard.append([InlineKeyboardButton("test",callback_data="test")])
-        for ringtone in ringtones:
-            message = message + "\n " + ringtone
-            keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
-        #bot.send_message(chat_id=update.message.chat_id, text=message) 
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        update.message.reply_text('Please choose:', reply_markup=reply_markup)
+        if update.message.chat_id in config.authorized_group1:
+            ringtones = RandomizeRingtone.getFiles("/")
+            keyboard = []
+            message = "ringtones:"
+            for ringtone in ringtones:
+                message = message + "\n " + ringtone
+                keyboard.append([InlineKeyboardButton(ringtone,callback_data=ringtone)])
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            update.message.reply_text('Please choose:', reply_markup=reply_markup)
+        else:
+            bot.send_message(chat_id=update.message.chat_id, text = "not authorized")
         #thread1 = threading.Thread(target = CoMakingBot._getandsendtones, args = (bot,update))
         #thread1.start()
     @run_async
@@ -173,21 +171,21 @@ class CoMakingBot:
         fdd_handler = CommandHandler('FDD',CoMakingBot.fdd,pass_args=True)
         github_handler = CommandHandler('github',CoMakingBot.github_events,pass_args=True)
         google_handler = CommandHandler('events', CoMakingBot.events, pass_args=True)
+        bell_handler = CommandHandler('doorbell',CoMakingBot.bell_sounds)
+        bell_callback_handler = CallbackQueryHandler(CoMakingBot.buttonReply)
 
         CoMakingBot.dispatcher.add_handler(start_handler)
         CoMakingBot.dispatcher.add_handler(WikiUser_handler)
+        CoMakingBot.dispatcher.add_handler(help_handler)
+        CoMakingBot.dispatcher.add_handler(google_handler)
+        CoMakingBot.dispatcher.add_handler(github_handler)
         CoMakingBot.dispatcher.add_handler(nerven_handler,1)
         CoMakingBot.dispatcher.add_handler(new_ringtone_handler,1)
-        CoMakingBot.dispatcher.add_handler(help_handler)
+        CoMakingBot.dispatcher.add_handler(bell_handler,1)
         CoMakingBot.dispatcher.add_handler(fdd_handler,1)
-        CoMakingBot.dispatcher.add_handler(google_handler)
         CoMakingBot.dispatcher.add_handler(update_handler,2)
-        CoMakingBot.dispatcher.add_handler(github_handler,2)
-
-        bell_handler = CommandHandler('doorbell',CoMakingBot.bell_sounds)
-        CoMakingBot.dispatcher.add_handler(bell_handler,2)
-        bell_callback_handler = CallbackQueryHandler(CoMakingBot.buttonReply)
         CoMakingBot.dispatcher.add_handler(bell_callback_handler)
+
         #print("handlers registered")
     def run():
         CoMakingBot.updater.start_polling()
