@@ -8,6 +8,13 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 import bot_config as config
 
+from slack import WebClient
+from slack.errors import SlackApiError
+
+slack_token = config.slack_token
+slack_client = WebClient(token=slack_token)
+
+
 try:
         from icalevents.icalevents import events
         import calendar
@@ -55,7 +62,22 @@ if __name__ == "__main__":
                 if config.mode =="debug":
                         for admin in config.authorized_group2:
                                 sent_message = updater.bot.send_message(chat_id = admin, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                        slack_client.chat_postMessage(
+                                channel="topic-bottests",
+                                text=message
+                                )
                 else:
                         chat = config.large_group_id
                         #chat = config.small_group_id
                         sent_message = updater.bot.send_message(chat_id = chat, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
+                        slack_client.chat_postMessage(
+                                channel="announcements",
+                                blocks=[{
+                                "type": "section",
+                                "text": {
+                                        "type": "mrkdwn",
+                                        "text": message
+                                }
+                                }]
+                        )
+
