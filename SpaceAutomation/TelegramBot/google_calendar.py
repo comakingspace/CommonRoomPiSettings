@@ -24,7 +24,7 @@ else:
 
 calendar_url = "https://calendar.google.com/calendar/ical/4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com/public/basic.ics"
 
-def get_events(days_to_check = 14):
+def get_events(days_to_check = 7):
         in_two_weeks = datetime.combine(datetime.today(), time.max) + timedelta(days=days_to_check)
         es = events(calendar_url,start=datetime.now(),end=in_two_weeks)
         message = ""
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         print(message)
         if not message == None:
                 updater = Updater(token=config.token)
-                message = f"Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next two weeks:{message}"
+                message = f"Hey all, here are the events from our [google calendar](https://calendar.google.com/calendar/embed?src=4hbi6bp3lol50h2m422ljg81t0%40group.calendar.google.com&ctz=Europe%2FBerlin) of the next week:{message}"
                 if config.mode =="debug":
                         for admin in config.authorized_group2:
                                 sent_message = updater.bot.send_message(chat_id = admin, text = message, parse_mode=telegram.ParseMode.MARKDOWN, disable_notification=True)
